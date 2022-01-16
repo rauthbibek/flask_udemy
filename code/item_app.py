@@ -13,12 +13,16 @@ items = []
 # Createing Item resource by inheriting from resource class of flask_restful
 class Item(Resource):
     def get(self, name):
-        for item in items:
-            if item['name'] == name:
-                return item
-        return {'item': None}, 404 # 404 ==> Not found
+        # for item in items:
+        #     if item['name'] == name:
+        #         return item
+        item = next(filter(lambda x: x['name'] == name, items), None)
+        return {'item': item}, 200 if item is not None else 404 # 404 ==> Not found
 
     def post(self, name):
+        if next(filter(lambda x: x['name'] == name, items), None) is not None:
+            return {"message":f"AN item with name {name} already exists."}, 400 # 400 ==> Bad request
+            
         request_data  =  request.get_json()
         item ={'name': name, 'price': request_data["price"]}
         items.append(item)
