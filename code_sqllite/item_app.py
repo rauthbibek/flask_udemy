@@ -15,6 +15,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 from security import authenticate, identity
 from flask_jwt import JWT, jwt_required
+from user import UserRegister
 
 app = Flask(__name__)
 app.secret_key = 'xyz'
@@ -76,5 +77,7 @@ class ItemList(Resource):
 # Adding custom resource to api
 api.add_resource(Item, '/item/<string:name>') # https://127.0.0.1/item/chair
 api.add_resource(ItemList, '/items')
+api.add_resource(UserRegister, '/register')
+
 
 app.run(port=8080, debug=True)
